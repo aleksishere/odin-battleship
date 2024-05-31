@@ -1,0 +1,8 @@
+#boards {
+  display: grid;
+  gap: 30px;
+}
+
+#boards > div > div > div {
+  width: 20px;
+}

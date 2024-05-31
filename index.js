@@ -1,3 +1,5 @@
+const boardsDiv = document.getElementById('boards');
+
 class Ship {
   constructor(length) {
     this.length = length
@@ -60,8 +62,8 @@ class Gameboard {
   }
 
   receiveAttack(x,y) {
-    if (this.board[x][y] !== null) {
-      const ship = this.board[x][y]
+    if (this.board[y][x] !== null) {
+      const ship = this.board[y][x]
       ship.hit();
       this.board[y][x] = 'hit';
       return { result: "hit", sunk: ship.isSunk() };
@@ -69,6 +71,25 @@ class Gameboard {
       this.board[y][x] = 'miss';
       return { result: 'miss' };
     }
+  }
+
+  drawBoard(pName) {
+  /*this.board.forEach(row => {
+    console.log(row.map(cell => cell === null ? 'empty' : cell).join(' '));
+  }); */
+    const pDiv = document.createElement('div');
+    pDiv.id = pName;
+    boardsDiv.appendChild(pDiv);
+    this.board.forEach(row => {
+      const rowDiv = document.createElement("div");
+      rowDiv.style = "display: flex;"
+      pDiv.appendChild(rowDiv)
+      row.forEach(cell => {
+        const cellDiv = document.createElement('div');
+        cellDiv.innerText = cell === null ? 'O' : 'S';
+        rowDiv.appendChild(cellDiv);
+      })
+    })
   }
 }
 
@@ -89,4 +110,22 @@ class BotPlayer extends Player {
   constructor(name) {
     super(name)
   }
+}
+
+function startGame(p1Name, p2Name) {
+  const player1 = new RealPlayer(p1Name);
+  const player2 = new BotPlayer(p2Name);
+
+  const ship1 = new Ship(3);
+  player1.gameboard.placeShip(ship1, 0, 0, "vertical");
+  player1.gameboard.placeShip(ship1, 0, 3, "horizontal");
+  player1.gameboard.placeShip(ship1, 7, 0, "vertical");
+  player1.gameboard.placeShip(ship1, 3, 8, "horizontal");
+  player1.gameboard.drawBoard(p1Name)
+
+  player2.gameboard.placeShip(ship1, 0, 3, "horizontal");
+  player2.gameboard.placeShip(ship1, 3, 2, "vertical");
+  player2.gameboard.placeShip(ship1, 7, 1, "vertical");
+  player2.gameboard.placeShip(ship1, 4, 7, "horizontal");
+  player2.gameboard.drawBoard(p2Name)
 }
