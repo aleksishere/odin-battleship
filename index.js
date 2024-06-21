@@ -1,5 +1,8 @@
 const boardsDiv = document.getElementById('boards');
 const restartBtn = document.getElementById('restart-btn');
+const startBtn = document.getElementById('start-btn')
+const player1Controller = document.getElementById('player1-control')
+const player2Controller = document.getElementById('player2-control')
 
 class Ship {
   constructor(length) {
@@ -64,24 +67,22 @@ class Gameboard {
   }
 
   receiveAttack(x, y) {
-    if (this.board[y][x] == "hit" || this.board[y][x] == "miss") {
-      console.warn("User already clicked on this.")
-      return false;
-    }
-    if (this.board[y][x] !== null) {
+    let result;
+    if (this.board[y][x] instanceof Ship) {
       const ship = this.board[y][x]
       ship.hit();
       this.board[y][x] = "hit"
-      changeTurn()
-      return { result: "hit", sunk: ship.isSunk() };
+      result = { result: "hit", sunk: ship.isSunk() };
     } else {
       this.board[y][x] = "miss"
-      changeTurn()
-      return { result: 'miss' };
+      result = { result: 'miss' };
     }
+    changeTurn()
+    return result;
   }
 
   checkIfPlayerWon() {
+    if (this.isCleanBoard() === false) return false;
     for (let i = 0; i < this.board.length; i++) {
         for (let j = 0; j < this.board[i].length; j++) {
           const cell = this.board[i][j];
@@ -93,6 +94,17 @@ class Gameboard {
         }
       }
       return true;
+  }
+
+  isCleanBoard() {
+    let allNull = true;
+    for (let i = 0; i < this.board.length; i++) {
+        for (let j = 0; j < this.board[i].length; j++) {
+          const cell = this.board[i][j];
+          if (cell !== null) allNull = false;
+        }
+    }
+    return allNull;
   }
 
 }
@@ -117,15 +129,21 @@ class Guessboard {
   }
 
   guess(x, y) {
-    if (this.opponent.board[y][x] === "miss") {
+    if (!isGameReady) {
+      console.warn("Game is not ready!")
+      return false;
+    }
+    if (this.board[y][x] !== null) {
       console.warn("User already clicked on this.")
       return false;
-    } else if (this.opponent.board[y][x] !== null) {
+    }
+    const attackResult = this.opponent.receiveAttack(x, y);
+    if (attackResult.result === 'hit') {
       this.board[y][x] = 'hit';
-    } else {
+    } else if (attackResult.result === 'miss') {
       this.board[y][x] = 'miss';
     }
-    return false;
+    return attackResult;
   }
 }
 
@@ -156,7 +174,7 @@ class BotPlayer extends Player {
     super(name)
   }
 }
-
+let isGameReady = false;
 const player1 = new RealPlayer();
 const player2 = new RealPlayer();
 player1.setName("Aleks");
@@ -225,11 +243,9 @@ function drawBoards(player1, player2) {
         cellDiv.addEventListener('click', function (event) {
           if (player1.turn && event.target.parentNode.parentNode.id === player1.name) {
             player1.guessboard.guess(columnIndex, rowIndex, player1)
-            player2.gameboard.receiveAttack(columnIndex, rowIndex)
           }
           if (player2.turn && event.target.parentNode.parentNode.id === player2.name) {
             player2.guessboard.guess(columnIndex, rowIndex, player2)
-            player1.gameboard.receiveAttack(columnIndex, rowIndex)
           }
           drawBoards(player1, player2)
           checkForWin();
@@ -252,10 +268,12 @@ function drawBoards(player1, player2) {
 }
 
 function checkForWin() {
-  if (player1.gameboard.checkIfPlayerWon()) {
-    alert(`${player2.name} won!`);
-  } else if (player2.gameboard.checkIfPlayerWon()) {
-    alert(`${player1.name} won!`);
+  if (isGameReady) {
+    if (player1.gameboard.checkIfPlayerWon()) {
+      alert(`${player2.name} won!`);
+    } else if (player2.gameboard.checkIfPlayerWon()) {
+      alert(`${player1.name} won!`);
+    }  
   }
 }
 
@@ -270,4 +288,19 @@ restartBtn.addEventListener("click", function () {
   drawBoards(player1, player2)
   player1.guessboard.setOpponent(player2.gameboard)
   player2.guessboard.setOpponent(player1.gameboard)
+  isGameReady = false;
+})
+
+startBtn.addEventListener("click", () => {
+  player1.turn = true;
+  player2.turn = false;
+  isGameReady = start;
+})
+
+document.getElementById("player1Btn").addEventListener("click", () => {
+
+})
+
+document.getElementById("player2Btn").addEventListener("click", () => {
+
 })
