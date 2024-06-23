@@ -5,9 +5,13 @@
   <meta charset="UTF-8">
   <title>Battleships</title>
   <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="roboto-regular">
   <div id="boards">
   </div>
   <div id="game-controls">
@@ -16,26 +20,49 @@
   </div>
   <div class="player-controls">
     <div id="player1-control" class="controls">
-      <p>Player1</p>
-      <input id="player1X" type="number" placeholder="X">
-      <input id="player1Y" type="number" placeholder="Y">
-      <input id="player1Length" type="number" placeholder="Ship length">
+      <p id="player1Nickname">Player1</p>
+      <input id="player1X" type="number" placeholder="X" required>
+      <input id="player1Y" type="number" placeholder="Y" required>
+      <input id="player1Length" type="number" placeholder="Ship length" required>
       <select name="p1Moves" id="p1Moves">
         <option value="vertical">Vertical</option>
         <option value="horizontal">Horizontal</option>
       </select>
       <button class="buttons" id="player1Btn">Place ship</button>
+      <button class="buttons" id="player1GenerateBoard">Generate board</button>
     </div>
     <div id="player2-control" class="controls">
-      <p>Player2</p>
-      <input id="player2X" type="number" placeholder="X">
-      <input id="player2Y" type="number" placeholder="Y">
-      <input id="player2Length" type="number" placeholder="Ship length">
+      <p id="player2Nickname">Player2</p>
+      <input id="player2X" type="number" placeholder="X" required>
+      <input id="player2Y" type="number" placeholder="Y" required>
+      <input id="player2Length" type="number" placeholder="Ship length" required>
       <select name="p2Moves" id="p2Moves">
         <option value="vertical">Vertical</option>
         <option value="horizontal">Horizontal</option>
       </select>
       <button class="buttons" id="player2Btn">Place ship</button>
+      <button class="buttons" id="player2GenerateBoard">Generate board</button>
+    </div>
+  </div>
+
+  <div id="playerModal" class="modal">
+    <div class="modal-content">
+      <h2>Enter Player Details</h2>
+      <form id="playerForm">
+        <div>
+          <label for="player1Name">Player 1 Name:</label>
+          <input type="text" id="player1Name" name="player1Name" required>
+        </div>
+        <div>
+          <label for="player2Name">Player 2 Name:</label>
+          <input type="text" id="player2Name" name="player2Name" required>
+        </div>
+        <div>
+          <label for="player2IsBot">Is Player 2 a Bot?</label>
+          <input type="checkbox" id="player2IsBot" name="player2IsBot">
+        </div>
+        <button class="buttons" type="submit">Submit</button>
+      </form>
     </div>
   </div>
 
