@@ -37,7 +37,7 @@ class Gameboard {
   }
 
   placeShip(ship, x, y, dir) {
-    if (dir === "horizontal") {
+    if (dir === "vertical") {
       if (x + ship.length > 10) {
         throw new Error("Out of bounds!");
       }
@@ -49,7 +49,7 @@ class Gameboard {
       for (let i = 0; i < ship.length; i++) {
         this.board[y][x + i] = ship;
       }
-    } else if (dir === "vertical") {
+    } else if (dir === "horizontal") {
       if (y + ship.length > 10) {
         throw new Error("Out of bounds!");
       }
@@ -82,7 +82,6 @@ class Gameboard {
   }
 
   checkIfPlayerWon() {
-    if (this.isCleanBoard() === false) return false;
     for (let i = 0; i < this.board.length; i++) {
         for (let j = 0; j < this.board[i].length; j++) {
           const cell = this.board[i][j];
@@ -94,17 +93,6 @@ class Gameboard {
         }
       }
       return true;
-  }
-
-  isCleanBoard() {
-    let allNull = true;
-    for (let i = 0; i < this.board.length; i++) {
-        for (let j = 0; j < this.board[i].length; j++) {
-          const cell = this.board[i][j];
-          if (cell !== null) allNull = false;
-        }
-    }
-    return allNull;
   }
 
 }
@@ -182,16 +170,6 @@ player2.setName("Player 2");
 player1.turn = true;
 player1.guessboard.setOpponent(player2.gameboard)
 player2.guessboard.setOpponent(player1.gameboard)
-
-player1.gameboard.placeShip(new Ship(3), 0, 0, "vertical");
-player1.gameboard.placeShip(new Ship(3), 0, 3, "horizontal");
-player1.gameboard.placeShip(new Ship(3), 7, 0, "vertical");
-player1.gameboard.placeShip(new Ship(3), 3, 8, "horizontal");
-  
-player2.gameboard.placeShip(new Ship(3), 0, 3, "horizontal");
-player2.gameboard.placeShip(new Ship(3), 3, 2, "vertical");
-player2.gameboard.placeShip(new Ship(3), 7, 1, "vertical");
-player2.gameboard.placeShip(new Ship(3), 4, 7, "horizontal");
 drawBoards(player1, player2);
 
 function drawBoards(player1, player2) {
@@ -292,15 +270,25 @@ restartBtn.addEventListener("click", function () {
 })
 
 startBtn.addEventListener("click", () => {
+  if (isGameReady) {
+    throw new Error("Game already started")
+  };
   player1.turn = true;
   player2.turn = false;
-  isGameReady = start;
+  isGameReady = true;
 })
 
 document.getElementById("player1Btn").addEventListener("click", () => {
-
+  if (!isGameReady) {
+    console.log(document.getElementById('p1Moves').value)
+    player1.gameboard.placeShip(new Ship(Number(document.getElementById("player1Length").value)), Number(document.getElementById("player1X").value), Number(document.getElementById("player1Y").value), String(document.getElementById('p1Moves').value));
+    drawBoards(player1, player2)
+  }
 })
 
 document.getElementById("player2Btn").addEventListener("click", () => {
-
+  if (!isGameReady) {
+    player2.gameboard.placeShip(new Ship(Number(document.getElementById("player2Length").value)), Number(document.getElementById("player2X").value), Number(document.getElementById("player2Y").value), String(document.getElementById('p2Moves').value));
+    drawBoards(player1, player2)
+  }
 })

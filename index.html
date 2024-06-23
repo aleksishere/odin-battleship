@@ -1,34 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Battleships</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div id="boards">
-
   </div>
-
-  <button id="restart-btn">Restart board</button>
-  <button id="start-btn">Start game</button>
-
-  <div id="player1-control">
-    <p>Player1</p>
-    <input id="player1X" type="number">
-    <input id="player1Y" type="number">
-    <input id="player1Direction" type="text">
-    <button id="player1Btn">Place ship</button>
+  <div id="game-controls">
+    <button class="buttons" id="restart-btn">Restart board</button>
+    <button class="buttons" id="start-btn">Start game</button>
   </div>
-  <div id="player2-control">
-    <p>Player2</p>
-    <input id="player2X" type="number">
-    <input id="player2Y" type="number">
-    <input id="player2Direction" type="text">
-    <button id="player2Btn">Place ship</button>
+  <div class="player-controls">
+    <div id="player1-control" class="controls">
+      <p>Player1</p>
+      <input id="player1X" type="number" placeholder="X">
+      <input id="player1Y" type="number" placeholder="Y">
+      <input id="player1Length" type="number" placeholder="Ship length">
+      <select name="p1Moves" id="p1Moves">
+        <option value="vertical">Vertical</option>
+        <option value="horizontal">Horizontal</option>
+      </select>
+      <button class="buttons" id="player1Btn">Place ship</button>
+    </div>
+    <div id="player2-control" class="controls">
+      <p>Player2</p>
+      <input id="player2X" type="number" placeholder="X">
+      <input id="player2Y" type="number" placeholder="Y">
+      <input id="player2Length" type="number" placeholder="Ship length">
+      <select name="p2Moves" id="p2Moves">
+        <option value="vertical">Vertical</option>
+        <option value="horizontal">Horizontal</option>
+      </select>
+      <button class="buttons" id="player2Btn">Place ship</button>
+    </div>
   </div>
 
   <script src="index.js"></script>
 </body>
+
 </html>
