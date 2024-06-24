@@ -39,6 +39,7 @@ class Gameboard {
 
   placeShip(ship, x, y, dir) {
     if (this.shipCount >= 5) return false;
+    if (!isGameFinished) return false; //Prevent from adding new ships when game is not over.
     if (dir === "vertical") {
       if (x + ship.length > 10) {
         console.error("Out of bounds!");
@@ -246,6 +247,7 @@ function drawBoards() {
         cellDiv.style.cursor = "pointer";
         cellDiv.addEventListener('click', function (event) {
           if (player1.turn && event.target.parentNode.parentNode.id === player1.name) {
+            if (isGameFinished) return false;
             player1.guessboard.guess(columnIndex, rowIndex)
             if (isBot && player2.turn) {
               player2.guessboard.guessRandom();
@@ -362,9 +364,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (isBot) {
       player2.gameboard.generateBoard();
       document.getElementById('player2-control').style.display = "none";
+      document.getElementById("player-controls").style.gridTemplateColumns = "200px";
     }
     drawBoards();
-
     document.getElementById("playerModal").style.display = "none";
   };
 });
